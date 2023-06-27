@@ -16,7 +16,10 @@ fn main() {
 }
 
 fn create_note(path: String) {
+    println!("Enter a title for your note:");
     let title: String = read_line();
+
+    println!("\nEnter content for your note:");
     let content: String = read_line();
 
     let note = Note {
@@ -25,9 +28,13 @@ fn create_note(path: String) {
     };
 
     let path: String = format!("{}{}.json", path, sanitize_file_name(&title));
+
     let mut file: File = File::create(path).expect("File creation failed");
+
     let serialized_note = serde_json::to_string(&note).expect("Seriaization failed");
-    file.write_all(serialized_note.as_bytes());
+
+    file.write_all(serialized_note.as_bytes())
+        .expect("Could not write to file");
 }
 
 // Ensures that the filename is valid, replaces non-alphanumeric characters with an underscore.
